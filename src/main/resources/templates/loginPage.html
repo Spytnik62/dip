@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вход в Личный Кабинет</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      width: 350px; /* Увеличим ширину для более удобного ввода */
+      box-sizing: border-box; /* Учитываем отступы и границы в ширине */
+    }
+    .login-form h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333; /* Цвет заголовка */
+    }
+    .input-group {
+      margin-bottom: 15px;
+    }
+    .input-group label {
+      display: block;
+      margin-bottom: 5px;
+      color: #555; /* Цвет меток */
+    }
+    .input-group input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold; /* Сделаем текст на кнопке жирным */
+    }
+    button:hover {
+      background-color: #007bff;
+    }
+    .error-message {
+      color: red;
+      text-align: center;
+      margin-top: 10px;
+    }
+    .back-button {
+      margin-top: 15px;
+      background-color: #007bff; /* Цвет кнопки "Назад" */
+    }
+    .back-button:hover {
+      background-color: #0056b3; /* Цвет кнопки "Назад" при наведении */
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="login-form">
+    <h2>Вход в Личный Кабинет</h2>
+    <form id="loginForm" onsubmit="event.preventDefault(); submitLogin();">
+      <div class="input-group">
+        <label for="loginNickname">Никнейм</label>
+        <input type="text" id="loginNickname" required>
+      </div>
+      <div class="input-group">
+        <label for="loginPassword">Пароль</label>
+        <input type="password" id="loginPassword" required>
+      </div>
+      <button type="submit">Войти</button>
+    </form>
+    <div class="error-message" id="errorMessage"></div>
+    <button class="back-button" onclick="goBack()">Назад на главную страницу</button>
+  </div>
+</div>
+<script>
+  function submitLogin() {
+    const nickname = document.getElementById('loginNickname').value;
+    const password = document.getElementById('loginPassword').value;
+    const errorMessage = document.getElementById('errorMessage');
+    // Здесь вы можете добавить логику для отправки данных на сервер
+    fetch('/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({
+        'username': nickname,
+        'password': password
+      })
+    })
+            .then(response => {
+              if (response.ok) {
+                alert('Авторизация прошла успешно!');
+               // window.location.href = '/home'; // Перенаправление на домашнюю страницу
+              } else {
+                errorMessage.textContent = 'Ошибка при авторизации. Проверьте никнейм и пароль.';
+              }
+            })
+            .catch(error => {
+              console.error('Ошибка:', error);
+              errorMessage.textContent = 'Произошла ошибка при попытке авторизации.';
+            });
+  }
+  function goBack() {
+    window.location.href = 'http://localhost:8080/mainPage'; // Замените '/' на URL вашей главной страницы
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Личный кабинет</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: #f9f9f9;
+    }
+    h1 {
+      text-align: center;
+    }
+    .user-info, .house-info {
+      margin-bottom: 20px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background-color: #fff;
+    }
+    button {
+      display: block;
+      margin: 0 auto;
+      padding: 10px 15px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+
+    /* Модальное окно */
+    .modal {
+      display: none; /* Скрыто по умолчанию */
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.4);
+      padding-top: 60px;
+    }
+    .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto; /* Центрирование */
+      padding: 20px;
+      border: 1px solid #888;
+      width: 40%; /* Ширина модального окна */
+      border-radius: 5px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    input[type="text"],
+    input[type="date"],
+    input[type="number"] {
+      width: calc(100% - 22px); /* Уменьшаем ширину для учета отступов */
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Личный кабинет</h1>
+
+<div class="user-info">
+  <h2>Данные пользователя</h2>
+  <p><strong>Имя:</strong> <span id="userName">Иван</span></p>
+  <p><strong>Фамилия:</strong> <span id="userSurname">Иванов</span></p>
+  <p><strong>Отчество:</strong> <span id="userPatronymic">Иванович</span></p>
+  <p><strong>Дата рождения:</strong> <span id="userBirthday">01.01.1990</span></p>
+  <button onclick="openUserModal()">Изменить данные</button>
+</div>
+
+<div class="house-info">
+  <h2>Данные о строящемся доме</h2>
+  <p><strong>Место строительства:</strong> <span id="houseLocation">Город</span></p>
+  <p><strong>Тип дома:</strong> <span id="houseType">Коттедж</span></p>
+  <p><strong>Количество этажей:</strong> <span id="houseFloors">2</span></p>
+  <p><strong>Материал стен:</strong> <span id="houseMaterial">Кирпич</span></p>
+  <p><strong>Тип крыши:</strong> <span id="houseRoofType">Скатная</span></p>
+  <p><strong>Жилая площадь:</strong> <span id="houseArea">120 м²</span></p>
+  <button onclick="openHouseModal()">Изменить данные</button>
+</div>
+
+<!-- Модальное окно для редактирования данных пользователя -->
+<div id="userModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeUserModal()">&times;</span>
+    <h2>Редактирование данных пользователя</h2>
+    <label for="editUser Name">Имя:</label>
+    <input type="text" id="editUser Name" value="Иван">
+    <label for="editUser Surname">Фамилия:</label>
+    <input type="text" id="editUser Surname" value="Иванов">
+    <label for="editUser Patronymic">Отчество:</label>
+    <input type="text" id="editUser Patronymic" value="Иванович">
+    <label for="editUser Birthday">Дата рождения:</label>
+    <input type="date" id="editUser Birthday" value="1990-01-01">
+    <button onclick="saveUserData()">Сохранить</button>
+  </div>
+</div>
+
+<!-- Модальное окно для редактирования данных о доме -->
+<div id="houseModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeHouseModal()">&times;</span>
+    <h2>Редактирование данных о доме</h2>
+    <label for="editHouseLocation">Место строительства:</label>
+    <input type="text" id="editHouseLocation" value="Город">
+    <label for="editHouseType">Тип дома:</label>
+    <input type="text" id="editHouseType" value="Коттедж">
+    <label for="editHouseFloors">Количество этажей:</label>
+    <input type="number" id="editHouseFloors" value="2">
+    <label for="editHouseMaterial">Материал стен:</label>
+    <input type="text" id="editHouseMaterial" value="Кирпич">
+    <label for="editHouseRoofType">Тип крыши:</label>
+    <input type="text" id="editHouseRoofType" value="Скатная">
+    <label for="editHouseArea">Жилая площадь:</label>
+    <input type="text" id="editHouseArea" value="120 м²">
+    <button onclick="saveHouseData()">Сохранить</button>
+  </div>
+</div>
+
+<script>
+  // Открытие модального окна для редактирования данных пользователя
+  function openUserModal() {
+    document.getElementById("userModal").style.display = "block";
+  }
+
+  // Закрытие модального окна для редактирования данных пользователя
+  function closeUserModal() {
+    document.getElementById("userModal").style.display = "none";
+  }
+
+  // Сохранение данных пользователя
+  function saveUserData() {
+    document.getElementById("userName").innerText = document.getElementById("editUser Name").value;
+    document.getElementById("userSurname").innerText = document.getElementById("editUser Surname").value;
+    document.getElementById("userPatronymic").innerText = document.getElementById("editUser Patronymic").value;
+    document.getElementById("userBirthday").innerText = document.getElementById("editUser Birthday").value;
+    closeUserModal();
+
+    // Здесь можно добавить AJAX-запрос для сохранения данных в базу данных
+  }
+
+  // Открытие модального окна для редактирования данных о доме
+  function openHouseModal() {
+    document.getElementById("houseModal").style.display = "block";
+  }
+
+  // Закрытие модального окна для редактирования данных о доме
+  function closeHouseModal() {
+    document.getElementById("houseModal").style.display = "none";
+  }
+
+  // Сохранение данных о доме
+  function saveHouseData() {
+    document.getElementById("houseLocation").innerText = document.getElementById("editHouseLocation").value;
+    document.getElementById("houseType").innerText = document.getElementById("editHouseType").value;
+    document.getElementById("houseFloors").innerText = document.getElementById("editHouseFloors").value;
+    document.getElementById("houseMaterial").innerText = document.getElementById("editHouseMaterial").value;
+    document.getElementById("houseRoofType").innerText = document.getElementById("editHouseRoofType").value;
+    document.getElementById("houseArea").innerText = document.getElementById("editHouseArea").value;
+    closeHouseModal();
+
+    // Здесь также можно добавить AJAX-запрос для сохранения данных в базу данных
+  }
+
+  // Закрытие модальных окон при клике вне их
+  window.onclick = function(event) {
+    if (event.target == document.getElementById("userModal")) {
+      closeUserModal();
+    }
+    if (event.target == document.getElementById("houseModal")) {
+      closeHouseModal();
+    }
+  }
+</script>
+
+</body>
+</html>
+
+
+

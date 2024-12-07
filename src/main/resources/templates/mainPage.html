@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Строительная Компания "Загородный Уют"</title>
+</head>
+<body>
+
+<header>
+  <h1>Строительная Компания "Загородный Уют"</h1>
+  <div class="auth-buttons">
+    <button class="button" onclick="openRegisterForm()">Регистрация</button>
+    <button class="button" onclick="openLoginForm()">Вход</button>
+  </div>
+</header>
+
+<div class="container">
+  <h2>Наши Проекты</h2>
+  <div class="project">
+    <h3>Проект каркасного дома «Ореол»</h3>
+    <p>Общая площадь 105 - м2 Жилых комнат 4 - Габариты 12 х 14 м - Номер проекта 53 - От 4 400 000 руб</p>
+    <div class="carousel-inner" id="carouselInner1">
+      <img src="/image/1-1.jpg" alt="Проект 1 - Изображение 1" onclick="openModal(this)">
+      <img src="/image/1-2.jpg" alt="Проект 1 - Изображение 2" onclick="openModal(this)">
+      <img src="/image/1-3.jpg" alt="Проект 1 - Изображение 2" onclick="openModal(this)">
+      <img src="/image/1-4.png" alt="Проект 1 - Изображение 3" onclick="openModal(this)">
+    </div>
+    <button class="button prev" onclick="prevSlide()">Назад</button>
+    <button class="button next" onclick="nextSlide()">Вперед</button>
+  </div>
+
+  <div class="project">
+    <h3>Проект дома «Ранчо»</h3>
+    <p><strong>Общая площадь 98 м2 - Жилых комнат 3 - Габариты 12 х 9 м - Номер проекта 60 - От 4 700 000</strong></p>
+    <div class="carousel-inner" id="carouselInner2">
+      <img src="/image/2-1.jpg" alt="Проект 2 - Изображение 1" onclick="openModal(this)">
+      <img src="/image/2-2.jpg" alt="Проект 2 - Изображение 2" onclick="openModal(this)">
+      <img src="/image/2-3.jpg" alt="Проект 2 - Изображение 3" onclick="openModal(this)">
+      <img src="/image/2-4.jpg" alt="Проект 2 - Изображение 3" onclick="openModal(this)">
+      <img src="/image/2-5.jpg" alt="Проект 2 - Изображение 3" onclick="openModal(this)">
+    </div>
+    <button class="button prev" onclick="prevSlide()">Назад</button>
+    <button class="button next" onclick="nextSlide()">Вперед</button>
+  </div>
+</div>
+
+<!-- Оверлей для модальных окон -->
+<div class="overlay" id="overlay"></div>
+
+<!-- Форма обратной связи -->
+<div class="form-popup" id="contactForm">
+  <h2>Обратная связь</h2>
+  <input type="text" id="name" placeholder="Ваше имя" required>
+  <input type="text" id="phone" placeholder="Ваш номер телефона" required>
+  <input type="text" id="totalArea" placeholder="Общая площадь дома (м²)" required>
+  <select id="foundationType" required>
+    <option value="" disabled selected>Тип фундамента</option>
+    <option value="ленточный">Ленточный</option>
+    <option value="свайный">Свайный</option>
+    <option value="плитный">Плитный</option>
+  </select>
+  <input type="text" id="wallMaterial" placeholder="Материал стен" required>
+  <select id="roofType" required>
+    <option value="" disabled selected>Тип крыши</option>
+    <option value="двускатная">Двускатная</option>
+    <option value="односкатная">Односкатная</option>
+    <option value="мансардная">Мансардная</option>
+  </select>
+  <button class="button" onclick="submitContact()">Отправить</button>
+  <button class="button" onclick="closeForms()">Закрыть</button>
+</div>
+
+<!-- Форма регистрации -->
+<div class="form-popup" id="registerForm">
+  <h2>Регистрация</h2>
+  <input type="text" id="nickname" placeholder="Никнейм" required>
+  <input type="email" id="email" placeholder="Электронная почта" required>
+  <input type="password" id="password" placeholder="Пароль" required>
+  <button class="button" onclick="submitRegistration()">Зарегистрироваться</button>
+  <button class="button" onclick="closeForms()">Закрыть</button>
+</div>
+
+<!-- Форма авторизации -->
+<div class="form-popup" id="loginForm">
+  <h2>Вход</h2>
+  <input type="text" id="loginNickname" placeholder="Никнейм" required>
+  <input type="password" id="loginPassword" placeholder="Пароль" required>
+  <button class="button" onclick="submitLogin()">Войти</button>
+  <button class="button" onclick="closeForms()">Закрыть</button>
+</div>
+
+<!-- Модальное окно для изображений -->
+<div id="myModal" class="modal">
+  <span class="close" onclick="closeModal()">&times;</span>
+  <img class="modal-content" id="modalImage">
+</div>
+
+<script>
+  // Функция для открытия формы обратной связи
+  function openContactForm(projectName) {
+    document.getElementById('contactForm').style.display = 'block'; // Показываем форму
+    document.getElementById('overlay').style.display = 'block'; // Показываем оверлей
+  }
+
+  // Функция для открытия формы регистрации
+  function openRegisterForm() {
+    document.getElementById('registerForm').style.display = 'block'; // Показываем форму регистрации
+    document.getElementById('overlay').style.display = 'block'; // Показываем оверлей
+  }
+
+  // Функция для закрытия всех форм
+  function closeForms() {
+    document.getElementById('contactForm').style.display = 'none';
+    document.getElementById('registerForm').style.display = 'none';
+    document.getElementById('loginForm').style.display = 'none';
+    document.getElementById('overlay').style.display = 'none';
+  }
+
+  // Функция для отправки информации из формы обратной связи
+  function submitContact() {
+    const name = document.getElementById('name').value;
+    const phone = document.getElementById('phone').value;
+    const totalArea = document.getElementById('totalArea').value;
+    const foundationType = document.getElementById('foundationType').value;
+    const wallMaterial = document.getElementById('wallMaterial').value;
+    const roofType = document.getElementById('roofType').value;
+
+    // Создаем объект для отправки
+    const contactData = {
+      name,
+      phone,
+      totalArea,
+      foundationType,
+      wallMaterial,
+      roofType
+    };
+
+    // Отправляем запрос на сервер
+    fetch('/api/contact', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(contactData),
+    })
+            .then(response => {
+              if (response.ok) {
+                alert('Ваш запрос отправлен!');
+                closeForms(); // Закрываем форму после успешной отправки
+              } else {
+                alert('Ошибка при отправке запроса.');
+              }
+            })
+            .catch(error => {
+              console.error('Ошибка:', error);
+              alert('Ошибка при отправке запроса.');
+            });
+  }
+
+  // Функция для отправки данных регистрации
+  function submitRegistration() {
+    const nickname = document.getElementById('nickname').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    fetch('http://localhost:8080/api/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json', // Указываем тип контента
+      },
+      body: JSON.stringify({nickname, email, password}), // Преобразуем объект в JSON
+    })
+            .then(response => {
+              if (response.ok) {
+                alert('Регистрация прошла успешно!');
+                closeForms();
+              } else {
+                alert('Ошибка при регистрации.');
+              }
+            });
+  }
+
+  function openLoginForm() {
+    window.location.href = 'http://localhost:8080/homePage';
+  }
+
+  let currentSlideIndex = 0; // Текущий индекс слайда
+
+  function showSlide(index) {
+    const carouselInner = document.getElementById('carousel');
+    const totalSlides = carouselInner.children.length;
+
+    // Ограничиваем индекс
+    if (index < 0) {
+      index = totalSlides - 1; // Переход на последний слайд
+    } else if (index >= totalSlides) {
+      index = 0; // Переход на первый слайд
+    }
+
+    // Сдвиг карусели
+    const offset = -Math.floor(index / 2) * 100; // Умножаем на 100% ширины двух изображений
+    carouselInner.style.transform = `translateX(${offset}%)`;
+    currentSlideIndex = index; // Обновляем текущий индекс
+  }
+
+  function nextSlide() {
+    currentSlideIndex++;
+    if (currentSlideIndex >= 4) { // 4 - это общее количество изображений
+      currentSlideIndex = 0; // Возвращаемся к первому слайду
+    }
+    showSlide(currentSlideIndex);
+  }
+
+  function prevSlide() {
+    currentSlideIndex--;
+    if (currentSlideIndex < 0) {
+      currentSlideIndex = 3; // Переход на последний слайд
+    }
+    showSlide(currentSlideIndex);
+  }
+
+  function prevSlide(carouselId) {
+    const carouselInner = document.getElementById(carouselId);
+    const totalSlides = carouselInner.querySelectorAll('img').length;
+
+    // Уменьшаем индекс на 1
+    currentSlideIndex--;
+    if (currentSlideIndex < 0) {
+      currentSlideIndex = totalSlides - 1; // Переход на последний слайд
+    }
+    showSlide(carouselId, currentSlideIndex);
+  }
+
+  function nextSlide(carouselId) {
+    const carouselInner = document.getElementById(carouselId);
+    const currentIndex = Array.from(carouselInner.querySelectorAll('img')).findIndex(img => img.style.transform === '');
+    const newIndex = showSlide(carouselId, currentIndex + 1);
+  }
+
+  function prevSlide(carouselId) {
+    const carouselInner = document.getElementById(carouselId);
+    const currentIndex = Array.from(carouselInner.querySelectorAll('img')).findIndex(img => img.style.transform === '');
+    const newIndex = showSlide(carouselId, currentIndex - 1);
+  }
+
+  // Функции для модального окна
+  function openModal(img) {
+    const modal = document.getElementById("myModal");
+    const modalImg = document.getElementById("modalImage");
+    modal.style.display = "block";
+    modalImg.src = img.src; // Устанавливаем источник изображения в модальном окне
+  }
+
+  function closeModal() {
+    const modal = document.getElementById("myModal");
+    modal.style.display = "none"; // Закрываем модальное окно
+  }
+
+  // Закрытие модального окна при клике вне изображения
+  window.onclick = function(event) {
+    const modal = document.getElementById("myModal");
+    if (event.target == modal) {
+      closeModal();
+    }
+  }
+</script>
+
+<!-- Кнопка обратной связи перемещена сюда -->
+<div class="ContactFormContainer">
+  <button class="ContactForm" onclick="openContactForm('Проект Дома 1')">Обратная связь</button>
+</div>
+
+<style>
+  img {
+    margin: 10px; /* Отступ вокруг изображений */
+    max-width: 100%; /* Чтобы изображения не выходили за пределы контейнера */
+    cursor: pointer; /* Указатель при наведении */
+  }
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+  }
+  .project h3{
+    font-size: 24px; /* Размер шрифта заголовка */
+    font-weight: bold; /* Делаем заголовок жирным */
+    margin-bottom: 10px; /* Отступ снизу заголовка */
+  }
+  .project p{
+    font-size: 18px; /* Размер шрифта заголовка */
+    font-weight: bolder; /* Делаем заголовок жирным */
+    margin-bottom: 10px; /* Отступ снизу заголовка */
+  }
+  header {
+    color: #4c5ec7;
+    padding: 10px 20px;
+    text-align: center;
+    position: relative;
+    height: 610px;
+    background-image: url('/image/head.jpg'); /* Укажите путь к вашему изображению */
+    background-size: cover; /* Заполнение всего заголовка изображением */
+    background-position: center; /* Центрирование изображения */
+  }
+  .auth-buttons {
+    position: absolute;
+    left: 50%;
+    bottom: 20px; /* Расстояние от низа заголовка */
+    transform: translateX(-50%); /* Центрирование по горизонтали */
+    display: flex; /* Используем flexbox для выравнивания кнопок */
+    gap: 20px; /* Отступ между кнопками */
+  }
+  .auth-buttons button {
+    padding: 10px 15px; /* Увеличиваем размер кнопок */
+    background-color: #4c5ec7;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  .auth-buttons button:hover {
+    background-color: #3b4a97; /* Цвет при наведении */
+  }
+  .container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+  }
+  .project {
+    position: relative;
+    background: white;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  .carousel-inner {
+    display: flex;
+    transition: transform 0.5s ease;
+    width: 100%;
+  }
+  .project img {
+    width: 100%;
+    height: 200px; /* Задайте фиксированную высоту для изображений */
+    object-fit: cover; /* Обеспечивает правильное отображение изображения */
+  }
+  .button {
+    padding: 10px 15px;
+    background-color: #4c5ec7;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 10px;
+  }
+  .ContactFormContainer {
+    width: 30%;
+    margin: auto;
+    overflow: hidden;
+  }
+  .ContactForm {
+    width: 100%;
+    height: 100%;
+    padding: 10px 15px;
+    background-color: #4c5ec7;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    color: blue;
+  }
+  .button:hover {
+    background-color: #4c5ec7;
+  }
+  .form-popup {
+    display: none;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border: 1px solid #ccc;
+    background-color: white;
+    padding: 20px;
+    z-index: 100;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  .form-popup input, .form-popup select {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+  }
+  .overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 50;
+  }
+  footer {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #4c5ec7;
+    color: white;
+    text-align: center;
+  }
+  .button.prev {
+    left: 10px;
+  }
+  .button.next {
+    right: 10px;
+  }
+
+  /* Стили для модального окна */
+  .modal {
+    display: none; /* Скрыто по умолчанию */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.8); /* Полупрозрачный фон */
+  }
+  .modal-content {
+    margin: 15% auto;
+    display: block;
+    max-width: 80%;
+  }
+  .close {
+    position: absolute;
+    top: 20px;
+    right: 35px;
+    color: white;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+</style>
+
+<footer>
+  <p>© 2023 Строительная Компания "Загородный Уют"</p>
+</footer>
+
+</body>
+</html>
+
+
+
